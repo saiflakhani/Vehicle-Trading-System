@@ -1,13 +1,7 @@
 <?php
- ob_start();
  session_start();
- // it will never let you open index(login) page if session is set
- if ( isset($_SESSION['user'])!="" ) {
-  header("Location: header.php");
-  exit;
- }
+ require_once 'dbconnect.php';
  ?>
-
 <html>
 <head>
 	<title>Vehicle Trading System | <!--Do Something smart here--> </title>
@@ -50,10 +44,18 @@
 			<div class="dropdown" style="padding-top:15px">
 			  <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Account Actions<span class="caret"></span></button>
 			  <ul class="dropdown-menu">
-			    <li><a href="/logout.php" class="button">Log out</a></li>
-			    <li><a href="/account.php" class="button">Your Account</a></li>
-			    <li><a class="button" href="/sign_up.php">Sign Up</a></li>
-				<li><a class="button" href="/login.php">Log in</a></li>
+				  <?php
+				  if ( isset($_SESSION['user'])!="" ) {
+				   echo '<li><a href="/logout.php" class="logout">Log out</a></li>
+			    <li><a href="/account.php" class="button">Your Account</a></li>';
+			   }
+			   else{
+				   echo '<li><a class="button" href="/sign_up.php">Sign Up</a></li>
+				<li><a class="button" href="/login.php">Log in</a></li>';
+			   }
+				  ?>
+			    
+			    
 			  </ul>
 			</div>
 		</div>
@@ -85,7 +87,7 @@
 
 			          <!-- Alternate content here -->
 		</div>
-		<p><h3>Sign up as a new user</h3></p>
+		<p><h3>Sign into your account</h3></p>
 		
 		<form class="form-horizontal" style="padding:10px" method="post">
 		  <div class="form-group">
@@ -100,11 +102,6 @@
 		      <input type="password" class="form-control" name="pwd" placeholder="Enter password">
 		    </div>
 		  </div>
-		  <div class="form-group"> 
-		    <label class="control-label col-sm-2" for="pwd2"><h4>Re-Enter Password:</h4></label>
-		    <div class="col-sm-3"> 
-		      <input type="password" class="form-control" name="pwd2" placeholder="Enter password">
-		    </div>
 		  </div>
 		  <div class="form-group"> 
 		    <div class="col-sm-offset-2 col-sm-3">
@@ -129,23 +126,26 @@
 	echo "\nConnected successfully";
 		if(isset($_POST['submit']))
 		{
-			if(isset($_POST['email']) && !empty($_POST['email']) AND isset($_POST['pwd']) && !empty($_POST['pwd']) && isset($_POST['pwd2']) && !empty($_POST['pwd2'])){
+			if(isset($_POST['email']) && !empty($_POST['email']) AND isset($_POST['pwd']) && !empty($_POST['pwd'])){
 				$email=$_POST['email'];
 				$password= $_POST['pwd'];
-				$password2=$_POST['pwd2'];
 			}
 			
 			
 			
 			
-			$sql = "INSERT INTO users(email,password) values('$email','$password')";
-			
-			if (mysqli_query($conn, $sql)) {
+			$sql = "SELECT * FROM users WHERE email='$email'";
+			$res = mysqli_query($conn,$sql);
+			if ($res = mysqli_query($conn, $sql)) {
 			    echo '<div class="alert alert-success">
-  				  		<strong>Success!</strong> Indicates a successful or positive action.
+  				  		Login Successful
 						</div>';
+				$row = $res->fetch_assoc();
+				$_SESSION['user'] = $row['email'];
+				echo $sql;
+				header("Location: header.php");
 			} else {
-			    echo "Error creating database: " . mysqli_error($conn);
+			    echo "Error in database: " . mysqli_error($conn);
 			}
 			
 		

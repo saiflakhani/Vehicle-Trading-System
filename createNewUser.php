@@ -15,7 +15,7 @@ echo "\nConnected successfully";
 if(isset($_POST['submit']))
 {
 	$email=$_POST['email'];
-	$password= 
+	$password= $_POST['']
 	echo $email;
 }
 
