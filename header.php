@@ -4,7 +4,7 @@
  
  // if session is not set this will redirect to login page
  if( !isset($_SESSION['user']) ) {
-  //header("Location: login.php");
+  header("Location: login.php");
   exit;
  }?>
 
@@ -233,6 +233,8 @@
         <tr><td><h6>Manufacturer</h6></td></tr>
         <tr><td><h6>Kilometers Run</h6></td></tr>
         <tr><td><h6>Price</h6></td></tr>
+		<tr><td><h6>Year</h6></td></tr>
+		<tr><td><h6>Fuel</h6></td></tr>
       
     </table></td>';
 				
