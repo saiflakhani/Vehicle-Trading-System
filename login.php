@@ -107,8 +107,10 @@
 		    <div class="col-sm-offset-2 col-sm-3">
 		      <button type="submit" class="btn btn-default" name="submit">Submit</button>
 		    </div>
+			<button class="btn btn-default" name="signUpbtn">Sign Up</button>
 		  </div>
 		</form>
+		
 		
 	<?php
 	$servername = "localhost";
@@ -124,6 +126,12 @@
 	    die("Connection failed: " . $conn->connect_error);
 	} 
 	echo "\nConnected successfully";
+	
+	if(isset($_POST['signUpbtn']))
+	{
+		header("Location: sign_up.php");
+	}
+	
 		if(isset($_POST['submit']))
 		{
 			if(isset($_POST['email']) && !empty($_POST['email']) AND isset($_POST['pwd']) && !empty($_POST['pwd'])){
